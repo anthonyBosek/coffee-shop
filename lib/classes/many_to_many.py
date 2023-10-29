@@ -32,10 +32,6 @@ class Coffee:
     def average_price(self):
         prices = [order.price for order in self.orders()]
         return sum(prices) / len(prices) if len(prices) else 0
-        # if len(prices):
-        #     return sum(prices) / len(prices)
-        # else:
-        #     return 0
 
 
 class Customer:
@@ -66,7 +62,23 @@ class Customer:
 
     def create_order(self, coffee, price):
         return Order(self, coffee, price)
-        # maybe something here?? ( associates it with that customer and the coffee object provided)
+
+    @classmethod
+    def most_aficionado(cls, coffee):
+        coff_orders = [order for order in Order.all if order.coffee == coffee]
+        temp_total = 0
+        max_spent = 0
+        max_cust = None
+        for cust in cls.all:
+            for order in coff_orders:
+                if order.customer == cust:
+                    temp_total += order.price
+            if temp_total > max_spent:
+                max_spent = temp_total
+                max_cust = cust
+            temp_total = 0
+            print(cust.name, temp_total, max_spent, max_cust)
+        return max_cust
 
 
 class Order:
